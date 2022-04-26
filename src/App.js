@@ -5,23 +5,35 @@ function App() {
   const [value, setValue] = React.useState("");
   const [listItem, setListItem] = React.useState([]);
 
-  function onClick(e) {
-    setListItem((list) => [...list, value]);
-    document.getElementById("text").value = "";
+  function addItem(event) {
+    if (value) {
+      setListItem((list) => [...list, value]);
+      setValue("");
+    } else {
+      console.log(listItem);
+    }
   }
-  function onChange(e) {
-    setValue(e.target.value);
-  }
+  const handleDelete = (value) => {
+    const newList = listItem.filter((item) => item !== value);
+    setListItem(newList);
+  };
   return (
     <div>
       <div>To Do List</div>
       <div>
-        <input type="text" onChange={onChange} id="text" />
-        <button onClick={onClick}>Add</button>
+        <input
+          value={value}
+          type="text"
+          onChange={(event) => {
+            setValue(event.target.value);
+          }}
+          autoFocus
+        />
+        <button onClick={addItem}>Add</button>
       </div>
       <div>
-        {listItem.map((e, i) => {
-          return <Item text={e} key={i} />;
+        {listItem.map((e) => {
+          return <Item content={e} key={e} onDelete={() => handleDelete(e)} />;
         })}
       </div>
     </div>

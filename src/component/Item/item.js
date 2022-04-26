@@ -1,43 +1,73 @@
-import React from "react";
-
+import React, { useState } from "react";
+import DeleteMode from "../DeleteMode/DeleteMode";
 function Item(props) {
-  const [text, setText] = React.useState(props.text);
-  const [edit, setEdit] = React.useState(true);
-  const testDelete = React.useRef();
-  let inputValue = "";
-  function onClickDelete(e) {
-    testDelete.current.remove();
-  }
-  function onClickEdit() {
-    if (!edit && inputValue !== "") {
-      setText(inputValue);
-    }
-    setEdit(!edit);
-  }
-  function onClickCancel() {
-    setEdit(true);
-  }
-  function onChange(e) {
-    inputValue = e.target.value;
-  }
+  const [content, setContent] = useState(props.content);
+  const [inputValue, setInputValue] = useState(content);
+  const [isEditingMode, setEditingMode] = useState(true);
+  const [isDeleteMode, setDeleteMode] = useState(true);
+
   return (
     <React.Fragment>
-      {edit ? (
-        <div ref={testDelete}>
-          <div>{text}</div>
-          <div>
-            <button onClick={onClickEdit}>edit</button>
-            <button onClick={onClickDelete}>delete</button>
-          </div>
+      {isEditingMode ? (
+        <div>
+          {isDeleteMode ? (
+            <React.Fragment>
+              <div>
+                <input
+                  type="checkbox"
+                  defaultChecked="checked"
+                  onClick={(event) => {
+                    console.log(event.target.checked);
+                  }}
+                />
+                {content}
+              </div>
+              <div>
+                <button
+                  onClick={(event) => {
+                    setEditingMode(false);
+                    setInputValue(content);
+                  }}
+                >
+                  edit
+                </button>
+                <button onClick={() => setDeleteMode(false)}>delete</button>
+              </div>
+            </React.Fragment>
+          ) : (
+            <DeleteMode
+              clickYes={props.onDelete}
+              clickNo={() => setDeleteMode(true)}
+            />
+          )}
         </div>
       ) : (
-        <div ref={testDelete}>
+        <div>
           <div>
-            <input onChange={onChange} autoFocus />
+            <input
+              value={inputValue}
+              onChange={(event) => {
+                setInputValue(event.target.value);
+              }}
+              autoFocus
+            />
           </div>
           <div>
-            <button onClick={onClickEdit}>edit</button>
-            <button onClick={onClickCancel}>cancel</button>
+            <button
+              onClick={() => {
+                inputValue ? setContent(inputValue) : console.log("lll");
+                setEditingMode(true);
+              }}
+            >
+              Save
+            </button>
+            <button
+              onClick={() => {
+                setEditingMode(false);
+              }}
+            >
+              cancel
+            </button>
           </div>
         </div>
       )}
