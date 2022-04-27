@@ -1,6 +1,6 @@
 import React from "react";
 
-function DeleteMode(props) {
+function confirmDelete(props) {
   return (
     <React.Fragment>
       <div>
@@ -13,4 +13,4 @@ function DeleteMode(props) {
     </React.Fragment>
   );
 }
-export default DeleteMode;
+export default confirmDelete;

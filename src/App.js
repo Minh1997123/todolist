@@ -3,19 +3,28 @@ import Item from "./component/Item/item";
 
 function App() {
   const [value, setValue] = React.useState("");
-  const [listItem, setListItem] = React.useState([]);
+  const [listItems, setListItems] = React.useState([]);
 
   function addItem(event) {
     if (value) {
-      setListItem((list) => [...list, value]);
+      setListItems((list) => [...list, { content: value, done: false }]);
       setValue("");
     } else {
-      console.log(listItem);
+      console.log(listItems);
     }
   }
   const handleDelete = (value) => {
-    const newList = listItem.filter((item) => item !== value);
-    setListItem(newList);
+    const newList = listItems.filter((item, index) => index !== value);
+    setListItems(newList);
+  };
+  const handlChange = (index, event) => {
+    console.log(event.target.type);
+    console.log(listItems[index]);
+    if (event.target.type === "checkbox") {
+      listItems[index].done = event.target.checked;
+    } else {
+      listItems[index].content = event.target.value;
+    }
   };
   return (
     <div>
@@ -32,8 +41,16 @@ function App() {
         <button onClick={addItem}>Add</button>
       </div>
       <div>
-        {listItem.map((e) => {
-          return <Item content={e} key={e} onDelete={() => handleDelete(e)} />;
+        {listItems.map((item, index) => {
+          return (
+            <Item
+              item={item.content}
+              key={item.content}
+              onDelete={() => handleDelete(index)}
+              onChange={(event) => handlChange(index, event)}
+              checked={item.done}
+            />
+          );
         })}
       </div>
     </div>
