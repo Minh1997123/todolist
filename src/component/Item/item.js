@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 // import ConfirmDelete from "../confirmDelete/confirmDelete";
 function Item(props) {
@@ -52,6 +53,9 @@ function Item(props) {
             <button
               onClick={(event) => {
                 inputValue ? setContent(inputValue) : console.log("lll");
+                axios
+                  .put(props.url + "/" + props.index)
+                  .then((res) => console.log(res));
                 setEditingMode(true);
               }}
             >
